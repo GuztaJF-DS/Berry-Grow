@@ -7,7 +7,6 @@ function startClock() {
     items.value.map((item)=>{
       return item.count+=1;
     })
-    // items.value[0].count += 1;
     startClock()
   }, 1000)
 }
@@ -25,7 +24,7 @@ startClock();
       <div class="berry" @click="resetClock(index)"  v-for="(item, index) in items" :key="index">
         <img draggable="false" src="../assets/sprites/general/plantedDirt.png">
         {{ item.count }}
-        </div>
+      </div>
     </div>
   </div>
 </template>

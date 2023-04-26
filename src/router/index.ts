@@ -7,9 +7,17 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
+      meta: {
+        title: 'Berry Grow',
+      },
       component: HomeView
     },
   ]
+})
+
+router.beforeEach((to,from,next)=>{
+  document.title = `${to.meta.title}`;
+  next();
 })
 
 export default router
