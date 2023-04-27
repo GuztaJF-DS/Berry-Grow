@@ -10,38 +10,43 @@ export interface IBerryCollection {
 
 export interface IBerry {
   name: string,
-  growthPhases: string[],
+  growthPhases: number[],
   sprites: string[],
   yieldMin: number,
   yieldMax: number
 }
 
-const individualBerry: IBerry = {
+const AspearBerry: IBerry = {
   name: 'Aspear',
   growthPhases:[
-    '0',
-    '10',
-    '20',
-    '30',
-    '40'
+    10,
+    20,
+    30,
+    40
   ],
   sprites:[
     'general/plantedDirt',
     'general/bud',
+    'aspear/tall/aspear',
+    'aspear/flower/aspear',
+    'aspear/grown/aspear',
   ],
-  yieldMin:1,
-  yieldMax:2,
+  yieldMin:2,
+  yieldMax:3,
 }
 
 const items = ref<IBerryCollection[]>([
-  { berry: individualBerry, timePassed: 0, currentPhase: 1 },
-  { berry: individualBerry, timePassed: 0, currentPhase: 0 },
+  { berry: AspearBerry, timePassed: 0, currentPhase: 0 },
+  { berry: AspearBerry, timePassed: 10, currentPhase: 1 },
 ]);
 
 
 function startClock() {
   setTimeout(() => {
     items.value.map((item) => {
+      if(item.berry.growthPhases[item.currentPhase]===item.timePassed+1){
+        item.currentPhase+=1;
+      }
       return item.timePassed += 1;
     })
     startClock()
@@ -50,6 +55,7 @@ function startClock() {
 
 function resetClock(index: number) {
   items.value[index].timePassed = 0;
+  items.value[index].currentPhase = 0;
 }
 startClock();
 </script>
@@ -77,7 +83,7 @@ startClock();
     left: 19px;
     bottom:21px;
     display: grid;
-    grid-template-columns: 48px 48px;
+    grid-template-columns: repeat(4,48px);
     grid-column-gap: 11px;
     grid-auto-rows: 48px;
   }

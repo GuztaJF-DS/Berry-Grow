@@ -10,7 +10,6 @@ let animationKeyFrame = false;
 function getAnimationFrame(){
   if(currentItem.item.currentPhase===0){
     animationKeyFrame =false;
-    return;
   }
   setTimeout(() => {
     animationKeyFrame=!animationKeyFrame;
@@ -29,10 +28,10 @@ getAnimationFrame();
       draggable="false"
       :src="'src/assets/sprites/' + 
         currentBerry.sprites[currentItem.item.currentPhase]
-      + currentAnimationFrame + '.png'"
+      + currentAnimationFrame + '.svg'"
     >
-      {{ currentAnimationFrame }}
-  </div>
+      {{ currentItem.item.timePassed }}
+  </div>  
 </template>
 
 <style scoped>

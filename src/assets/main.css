@@ -9,6 +9,6 @@
 body {
   display: flex;
   place-items: center;
-  background: url("./sprites/general/grass.png");
+  background: url("./sprites/general/grass.svg");
   color: black
 }
