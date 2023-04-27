@@ -1,18 +1,55 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-const items = ref([{ name: 'Aspear', count: 0 }, { name: 'Aspear', count: 0 }]);
+import BerryComponent from '../components/BerryComponent.vue';
+
+export interface IBerryCollection {
+  berry: IBerry,
+  timePassed: number,
+  currentPhase: number,
+}
+
+export interface IBerry {
+  name: string,
+  growthPhases: string[],
+  sprites: string[],
+  yieldMin: number,
+  yieldMax: number
+}
+
+const individualBerry: IBerry = {
+  name: 'Aspear',
+  growthPhases:[
+    '0',
+    '10',
+    '20',
+    '30',
+    '40'
+  ],
+  sprites:[
+    'general/plantedDirt',
+    'general/bud',
+  ],
+  yieldMin:1,
+  yieldMax:2,
+}
+
+const items = ref<IBerryCollection[]>([
+  { berry: individualBerry, timePassed: 0, currentPhase: 1 },
+  { berry: individualBerry, timePassed: 0, currentPhase: 0 },
+]);
+
 
 function startClock() {
   setTimeout(() => {
-    items.value.map((item)=>{
-      return item.count+=1;
+    items.value.map((item) => {
+      return item.timePassed += 1;
     })
     startClock()
   }, 1000)
 }
 
 function resetClock(index: number) {
-  items.value[index].count = 0;
+  items.value[index].timePassed = 0;
 }
 startClock();
 </script>
@@ -21,10 +58,11 @@ startClock();
   <div class="land">
     <img draggable="false" src="../assets/sprites/general/dirt.svg">
     <div class="berryBox">
-      <div class="berry" @click="resetClock(index)"  v-for="(item, index) in items" :key="index">
-        <img draggable="false" src="../assets/sprites/general/plantedDirt.png">
-        {{ item.count }}
-      </div>
+      <BerryComponent 
+        v-for="(item, index) in items"
+        :key="index" @click="resetClock(index)"
+        :item=item 
+      />
     </div>
   </div>
 </template>
@@ -42,12 +80,5 @@ startClock();
     grid-template-columns: 48px 48px;
     grid-column-gap: 11px;
     grid-auto-rows: 48px;
-  }
-
-  .berry > img {
-    bottom:40px
-  }
-  .berry:hover {
-    background-color: red;
   }
 </style>
