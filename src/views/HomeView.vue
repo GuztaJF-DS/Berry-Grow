@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
+import type { VueCookies } from 'vue-cookies'
 import BerryComponent from '../components/BerryComponent.vue';
+const $cookies = inject<VueCookies>('$cookies');
 
 export interface IBerryCollection {
+  berryId: string,
   berry: IBerry,
   timePassed: number,
   currentPhase: number,
@@ -36,20 +39,33 @@ const AspearBerry: IBerry = {
 }
 
 const items = ref<IBerryCollection[]>([
-  { berry: AspearBerry, timePassed: 0, currentPhase: 0 },
-  { berry: AspearBerry, timePassed: 10, currentPhase: 1 },
+  { berryId:'AspearBerry', berry: AspearBerry, timePassed: 0, currentPhase: 0 },
+  { berryId: 'AspearBerry', berry: AspearBerry, timePassed: 10, currentPhase: 1 },
 ]);
 
 
 function startClock() {
+  if($cookies){
+    const preStoredBerries = $cookies.get('berry');
+    if(!preStoredBerries){
+      $cookies.set('berry', items);
+      console.log('preStoredBerries')
+    }
+    console.log(preStoredBerries._value)
+  }
+  advanceClock()
+}
+
+
+function advanceClock() {
   setTimeout(() => {
     items.value.map((item) => {
-      if(item.berry.growthPhases[item.currentPhase]===item.timePassed+1){
-        item.currentPhase+=1;
+      if (item.berry.growthPhases[item.currentPhase] === item.timePassed + 1) {
+        item.currentPhase += 1;
       }
       return item.timePassed += 1;
     })
-    startClock()
+    advanceClock()
   }, 1000)
 }
 
